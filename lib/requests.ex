@@ -16,7 +16,7 @@ defmodule Requests do
 
     def get_json(url, headers \\ [], options \\ []) do
         headers = Keyword.put(headers, :"Content-Type", "application/json")
-        request(:get, url, "", headers, options)
+        get(url, headers, options)
     end
 
     def post_json!(url, body, headers \\ [], options \\ []) do
