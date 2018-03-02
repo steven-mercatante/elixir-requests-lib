@@ -7,6 +7,17 @@ defmodule Requests do
         |> Poison.decode!
     end
 
+    def get_json!(url, headers \\ [], options \\ []) do
+        case get_json(url, headers, options) do
+            {:ok, response} -> response
+            {:error, %Error{reason: reason}} -> raise Error, reason: reason
+        end
+    end
+
+    def get_json(url, headers \\ [], options \\ []) do
+        request(:get, url, "", headers, options)
+    end
+
     def post_json!(url, body, headers \\ [], options \\ []) do
         case post_json(url, body, headers, options) do
             {:ok, response} -> response
@@ -17,6 +28,6 @@ defmodule Requests do
     def post_json(url, body, headers \\ [], options \\ []) do
         body = Poison.encode!(body)
         headers = Keyword.put(headers, :"Content-Type", "application/json")
-        Requests.post url, body, headers, options
+        Requests.post(url, body, headers, options)
     end
 end
