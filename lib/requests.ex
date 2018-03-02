@@ -1,13 +1,21 @@
-# HTTPoison.post "http://httparrot.herokuapp.com/post", "{\"body\": \"test\"}", [{"Content-Type", "application/json"}]
-# Requests.post_json "http://httparrot.herokuapp.com/post", %{"body" => "foo"}
-
-# r Requests
-
 defmodule Requests do
     use HTTPoison.Base
+    alias HTTPoison.Error
 
-    def post_json(url, body \\ %{}, headers \\ [], options \\ []) do
-        body = Poison.encode! body
-        HTTPoison.post(url, body, headers, options)
+    def process_response_body(body) do
+        body
+        |> Poison.decode!
+    end
+
+    def post_json!(url, body, headers \\ [], options \\ []) do
+        case post_json(url, body, headers, options) do
+            {:ok, response} -> response
+            {:error, %Error{reason: reason}} -> raise Error, reason: reason
+        end
+    end
+
+    def post_json(url, body, headers \\ [], options \\ []) do
+        body = Poison.encode!(body)
+        Requests.post url, body, headers, options
     end
 end
