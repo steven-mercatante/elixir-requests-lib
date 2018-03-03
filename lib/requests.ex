@@ -15,7 +15,7 @@ defmodule Requests do
         headers = Keyword.put(headers, :"Content-Type", "application/json")
         case get(url, headers, options) do
             {:ok, response} -> {:ok, maybe_decode_response_body(response)}
-            {:error, %Error{reason: reason}} -> raise Error, reason: reason
+            {:error, %Error{reason: reason}} -> raise Error, reason: reason # TODO: this probably shouldn't raise
         end
     end
 
@@ -31,7 +31,7 @@ defmodule Requests do
         headers = Keyword.put(headers, :"Content-Type", "application/json")
         case post(url, body, headers, options) do
             {:ok, response} -> {:ok, maybe_decode_response_body(response)}
-            {:error, %Error{reason: reason}} -> raise Error, reason: reason
+            {:error, %Error{reason: reason}} -> raise Error, reason: reason # TODO: this probably shouldn't raise
         end
     end
 
